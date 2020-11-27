@@ -228,8 +228,10 @@ func (scheduler *Scheduler) Start() error {
 		for {
 			op := <-*ch
 			if err := scheduler.DBStorage.Exec(op).Error; err != nil {
-				log.Error(err)
+				log.Debug("Error executing database query: %s - error: %", op, err)
 			}
+
+			log.Debug("Remaining elements on channel to be processed: %d - query: %s (len: %d)", len(*ch), op, len(op))
 		}
 	}(scheduler.DBOpsQueue)
 

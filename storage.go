@@ -58,6 +58,10 @@ func (db *DBStorage) CreateTable(tableName string, fields []MapValueField) {
 func (db *DBStorage) CreateRecord(task *SchedulerTask, tableName string, fields []MapValueField, values []string) error {
 
 	var insertIntoDB = func(table string, fields []MapValueField, values []string) error {
+		if table == "" || fields == nil || values == nil {
+			return fmt.Errorf("Skipping data insertion, nil values passed to insertIntoDb")
+		}
+
 		log.Debugf("creating new record entry on table: %s", table)
 		var fieldNames []string
 		var formattedValues []string
